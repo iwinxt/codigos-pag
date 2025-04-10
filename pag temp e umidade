@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monitor de Temperatura e Umidade </title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #ffffff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      color: #00796B;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 30px 40px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .data {
+      font-size: 1.2rem;
+      margin: 10px 0;
+      color: #333;
+    }
+
+    .data span {
+      font-weight: bold;
+      color: #00796B;
+    }
+
+    .led {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin: 30px auto 10px;
+      background-color: gray;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .verde {
+      background-color: #4CAF50;
+      box-shadow: 0 0 20px #4CAF50;
+    }
+
+    .vermelho {
+      background-color: #f44336;
+      box-shadow: 0 0 20px #f44336;
+    }
+
+    footer {
+      margin-top: 50px;
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      font-weight: bold;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📡 Monitor de Temperatura e Umidade em Tempo Real</h1>
+
+  <div class="card">
+    <div class="data">🌡️ Temperatura: <span id="temp">--</span> °C</div>
+    <div class="data">💧 Umidade: <span id="umid">--</span> %</div>
+    <div id="led" class="led"></div>
+  </div>
+
+  <footer>
+    Desenvolvido  usando ESP32 e Firebase
+  </footer>
+
+  
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+  <script>
+    
+    const firebaseConfig = {
+        apiKey: "AIzaSyCELZUB4BzaezA4rZiYMERuQ6DF40ULL_A",
+        authDomain: "ledwoki.firebaseapp.com",
+        databaseURL: "https://ledwoki-default-rtdb.firebaseio.com",
+        projectId: "ledwoki",
+        storageBucket: "ledwoki.firebasestorage.app",
+        messagingSenderId: "272504469517",
+        appId: "1:272504469517:web:f2091f23bf7c564cbdbd44",
+        measurementId: "G-S8GBZ6SDZ1",
+};
+    
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const tempSpan = document.getElementById("temp");
+    const umidSpan = document.getElementById("umid");
+    const led = document.getElementById("led");
+
+    
+    db.ref("sensor").on("value", (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        tempSpan.textContent = data.temperatura;
+        umidSpan.textContent = data.umidade;
+
+        
+        led.className = "led";
+        if (data.led === "verde") {
+          led.classList.add("verde");
+        } else if (data.led === "vermelho") {
+          led.classList.add("vermelho");
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
