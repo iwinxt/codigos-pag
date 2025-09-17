@@ -1,0 +1,714 @@
+
+
+/* Variáveis específicas para a página de trocas */
+:root {
+  --trocas-primary: #3A7CA5;
+  --trocas-secondary: #81C3D7;
+  --trocas-accent: #FF9F1C;
+  --trocas-light: #F0F7FF;
+  --trocas-dark: #16425B;
+  --trocas-success: #5CB85C;
+  --trocas-warning: #F0AD4E;
+  --trocas-card-bg: #FFFFFF;
+  --trocas-border: #D9E7F8;
+  --trocas-gradient: linear-gradient(135deg, var(--trocas-primary) 0%, var(--trocas-secondary) 100%);
+}
+
+/* Override de estilos gerais para a página de trocas */
+body#trocas-page {
+  background-color: var(--trocas-light);
+  color: var(--trocas-dark);
+}
+
+body#trocas-page header {
+  background-color: var(--trocas-card-bg);
+  box-shadow: 0 4px 12px rgba(58, 124, 165, 0.1);
+}
+
+body#trocas-page .logo h1 {
+  color: var(--trocas-primary);
+}
+
+body#trocas-page nav ul li a {
+  color: var(--trocas-dark);
+}
+
+body#trocas-page nav ul li a:hover {
+  color: var(--trocas-primary);
+}
+
+body#trocas-page nav ul li a::after {
+  background-color: var(--trocas-primary);
+}
+
+body#trocas-page nav ul li a.active {
+  color: var(--trocas-primary);
+  font-weight: 600;
+}
+
+/* Hero section específica para trocas */
+#sistema-trocas-hero {
+  background: var(--trocas-gradient);
+  color: white;
+  padding: 80px 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+#sistema-trocas-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+  background-size: cover;
+}
+
+#sistema-trocas-hero .container {
+  position: relative;
+  z-index: 2;
+}
+
+#sistema-trocas-hero h1 {
+  font-size: 2.8rem;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+#sistema-trocas-hero p {
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin: 0 auto 30px;
+  opacity: 0.9;
+}
+
+/* Filtros e busca */
+.trocas-filtros-container {
+  background: var(--trocas-card-bg);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(58, 124, 165, 0.12);
+  padding: 30px;
+  margin: -40px auto 40px;
+  position: relative;
+  z-index: 10;
+  max-width: 1200px;
+}
+
+.search-bar-trocas {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.search-bar-trocas input {
+  flex: 1;
+  padding: 16px 24px;
+  border: 2px solid var(--trocas-border);
+  border-radius: 50px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.search-bar-trocas input:focus {
+  border-color: var(--trocas-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(58, 124, 165, 0.2);
+}
+
+.search-bar-trocas button {
+  padding: 16px 32px;
+  border: none;
+  border-radius: 50px;
+  background-color: var(--trocas-primary);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-bar-trocas button:hover {
+  background-color: var(--trocas-dark);
+  transform: translateY(-2px);
+}
+
+.filtros-avancados {
+  border-top: 1px solid var(--trocas-border);
+  padding-top: 25px;
+}
+
+.filtros-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.filtros-header h3 {
+  margin: 0;
+  color: var(--trocas-primary);
+  font-size: 1.3rem;
+}
+
+.filtros-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.filtros-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filtros-group label {
+  font-weight: 600;
+  color: var(--trocas-dark);
+  font-size: 0.95rem;
+}
+
+.filtros-group select {
+  padding: 12px 16px;
+  border: 2px solid var(--trocas-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+.filtros-group select:focus {
+  border-color: var(--trocas-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(58, 124, 165, 0.2);
+}
+
+/* Formulário de oferta */
+.trocas-form {
+  background: var(--trocas-card-bg);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(58, 124, 165, 0.12);
+  padding: 30px;
+  margin-bottom: 40px;
+}
+
+.trocas-form h3 {
+  color: var(--trocas-primary);
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.trocas-form h3::before {
+  content: '↯';
+  font-size: 1.8rem;
+}
+
+.trocas-form form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: var(--trocas-dark);
+  font-size: 0.95rem;
+}
+
+.form-group input {
+  padding: 14px 16px;
+  border: 2px solid var(--trocas-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: var(--trocas-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(58, 124, 165, 0.2);
+}
+
+.trocas-form button {
+  grid-column: 1 / -1;
+  justify-self: center;
+  margin-top: 15px;
+  padding: 16px 40px;
+  border: none;
+  border-radius: 50px;
+  background-color: var(--trocas-primary);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.trocas-form button:hover {
+  background-color: var(--trocas-dark);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(58, 124, 165, 0.3);
+}
+
+/* Lista de trocas */
+.trocas-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+.fantasia-card {
+  background: var(--trocas-card-bg);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(58, 124, 165, 0.12);
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.fantasia-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(58, 124, 165, 0.2);
+}
+
+.fantasia-img {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+}
+
+.fantasia-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.fantasia-card:hover .fantasia-img img {
+  transform: scale(1.05);
+}
+
+.favorito-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 2;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.favorito-btn:hover {
+  background: white;
+  transform: scale(1.1);
+}
+
+.favorito-btn.favoritado i {
+  color: var(--trocas-accent);
+}
+
+.card-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.card-badge:not(.destaque) {
+  background-color: var(--trocas-primary);
+  color: white;
+}
+
+.card-badge.destaque {
+  background-color: var(--trocas-accent);
+  color: var(--trocas-dark);
+}
+
+.card-badge.new-badge {
+  background-color: var(--trocas-success);
+  color: white;
+}
+
+.fantasia-info {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.fantasia-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.fantasia-header h3 {
+  margin: 0;
+  color: var(--trocas-dark);
+  font-size: 1.3rem;
+  line-height: 1.3;
+  flex: 1;
+}
+
+.rating {
+  color: var(--trocas-accent);
+  font-size: 0.9rem;
+  margin-left: 10px;
+}
+
+.fantasia-desc {
+  color: var(--trocas-dark);
+  opacity: 0.8;
+  margin-bottom: 15px;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.fantasia-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--trocas-dark);
+  opacity: 0.7;
+  margin-bottom: 20px;
+}
+
+.fantasia-meta span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fantasia-meta i {
+  color: var(--trocas-primary);
+  width: 16px;
+}
+
+.status-troca {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.status-disponivel {
+  background-color: rgba(92, 184, 92, 0.15);
+  color: var(--trocas-success);
+}
+
+.status-pendente {
+  background-color: rgba(240, 173, 78, 0.15);
+  color: var(--trocas-warning);
+}
+
+.status-finalizada {
+  background-color: rgba(108, 117, 125, 0.15);
+  color: #6c757d;
+}
+
+.fantasia-card .btn {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+/* Paginação */
+.paginacao {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  gap: 8px;
+}
+
+.pagina-btn {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 2px solid var(--trocas-border);
+  background: white;
+  color: var(--trocas-dark);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.pagina-btn:hover {
+  border-color: var(--trocas-primary);
+  color: var(--trocas-primary);
+  transform: translateY(-2px);
+}
+
+.pagina-btn.ativa {
+  background: var(--trocas-primary);
+  color: white;
+  border-color: var(--trocas-primary);
+}
+
+/* Mensagem de nenhum resultado */
+.nenhum-resultado {
+  text-align: center;
+  padding: 60px 20px;
+  grid-column: 1 / -1;
+}
+
+.nenhum-resultado i {
+  font-size: 3.5rem;
+  color: var(--trocas-secondary);
+  margin-bottom: 20px;
+  opacity: 0.7;
+}
+
+.nenhum-resultado h3 {
+  color: var(--trocas-dark);
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+}
+
+.nenhum-resultado p {
+  color: var(--trocas-dark);
+  opacity: 0.7;
+  max-width: 500px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Modal de solicitação */
+.modal-solicitacao .modal-content {
+  padding: 30px;
+  border-radius: 16px;
+  background: var(--trocas-card-bg);
+  max-width: 500px;
+  width: 90%;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--trocas-border);
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: var(--trocas-primary);
+  font-size: 1.5rem;
+}
+
+.close-modal {
+  font-size: 1.8rem;
+  color: var(--trocas-dark);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+  color: var(--trocas-accent);
+}
+
+.modal-body {
+  margin-bottom: 25px;
+}
+
+.modal-body p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.modal-body textarea {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid var(--trocas-border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 120px;
+  transition: border-color 0.3s ease;
+}
+
+.modal-body textarea:focus {
+  border-color: var(--trocas-primary);
+  outline: none;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.modal-footer .btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal-footer .btn.secondary {
+  background: transparent;
+  border: 2px solid var(--trocas-border);
+  color: var(--trocas-dark);
+}
+
+.modal-footer .btn.secondary:hover {
+  border-color: var(--trocas-primary);
+  color: var(--trocas-primary);
+}
+
+.modal-footer .btn.primary {
+  background: var(--trocas-primary);
+  border: 2px solid var(--trocas-primary);
+  color: white;
+}
+
+.modal-footer .btn.primary:hover {
+  background: var(--trocas-dark);
+  border-color: var(--trocas-dark);
+  transform: translateY(-2px);
+}
+
+/* Animações específicas para trocas */
+@keyframes trocasPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+.fantasia-card.highlight {
+  animation: trocasPulse 1s ease;
+  box-shadow: 0 0 0 3px var(--trocas-accent);
+}
+
+/* Responsividade para página de trocas */
+@media (max-width: 768px) {
+  .trocas-filtros-container {
+    margin: -20px auto 30px;
+    padding: 20px;
+  }
+  
+  .search-bar-trocas {
+    flex-direction: column;
+  }
+  
+  .filtros-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .trocas-form form {
+    grid-template-columns: 1fr;
+  }
+  
+  .trocas-lista {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-footer {
+    flex-direction: column;
+  }
+  
+  .modal-footer .btn {
+    width: 100%;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 992px) {
+  .trocas-lista {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  #sistema-trocas-hero h1 {
+    font-size: 2.2rem;
+  }
+  
+  #sistema-trocas-hero p {
+    font-size: 1.1rem;
+  }
+  
+  .fantasia-header {
+    flex-direction: column;
+  }
+  
+  .rating {
+    margin-left: 0;
+    margin-top: 8px;
+  }
+}
+
+/* Estilos para modo escuro na página de trocas */
+body#trocas-page.dark-theme {
+  --trocas-light: #1a2a3a;
+  --trocas-dark: #e0f0ff;
+  --trocas-card-bg: #213345;
+  --trocas-border: #2a4055;
+}
+
+body#trocas-page.dark-theme header {
+  background-color: var(--trocas-card-bg);
+}
+
+body#trocas-page.dark-theme .trocas-filtros-container,
+body#trocas-page.dark-theme .trocas-form {
+  background-color: var(--trocas-card-bg);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+body#trocas-page.dark-theme .search-bar-trocas input,
+body#trocas-page.dark-theme .filtros-group select,
+body#trocas-page.dark-theme .form-group input {
+  background-color: #1c2b3a;
+  border-color: #2a4055;
+  color: var(--trocas-dark);
+}
+
+body#trocas-page.dark-theme .modal-solicitacao .modal-content {
+  background-color: var(--trocas-card-bg);
+}
+
+body#trocas-page.dark-theme .modal-body textarea {
+  background-color: #1c2b3a;
+  border-color: #2a4055;
+  color: var(--trocas-dark);
+}

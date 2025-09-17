@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR" id="trocas-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco-Folia - Sistema de Trocas</title>
+  <link rel="stylesheet" href="styles.css"> <!-- Estilo base -->
+  <link rel="stylesheet" href="trocas.css"> <!-- Estilo específico para trocas -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <img src="logo.png" alt="Eco-Folia Logo">
+        <h1>Eco-Folia</h1>
+      </div>
+      <nav id="nav">
+        <ul>
+          <li><a href="index.html#hero">Início</a></li>
+          <li><a href="index.html#como-funciona">Como Funciona</a></li>
+          <li><a href="index.html#fantasias">Fantasias</a></li>
+          <li><a href="trocas.html" class="active">Trocas</a></li>
+          <li><a href="index.html#avaliacoes">Avaliações</a></li>
+        </ul>
+      </nav>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <section id="sistema-trocas-hero">
+    <div class="container">
+      <h1>Sistema de Trocas Sustentáveis</h1>
+      <p>Encontre a fantasia perfeita através de trocas conscientes e ajude a reduzir o desperdício</p>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="trocas-filtros-container">
+      <div class="search-bar-trocas">
+        <input type="text" class="search-input" placeholder="Buscar por nome, descrição ou localização...">
+        <button class="search-btn">
+          <i class="fas fa-search"></i> Buscar
+        </button>
+      </div>
+
+      <div class="filtros-avancados">
+        <div class="filtros-header" id="filtrosToggle">
+          <h3>Filtros Avançados</h3>
+          <i class="fas fa-chevron-down filtros-toggle"></i>
+        </div>
+        <div class="filtros-content" id="filtrosContent">
+          <div class="filtros-group">
+            <label for="categoria">Categoria:</label>
+            <select id="categoria">
+              <option value="">Todas as Categorias</option>
+              <option value="animal">Animal</option>
+              <option value="super-heroi">Super-Herói</option>
+              <option value="carnaval">Carnaval</option>
+              <option value="filmes">Filmes & Séries</option>
+            </select>
+          </div>
+
+          <div class="filtros-group">
+            <label for="tamanho">Tamanho:</label>
+            <select id="tamanho">
+              <option value="">Todos os Tamanhos</option>
+              <option value="pp">INFANTIL</option>
+              <option value="p">ADOLESCENTE</option>
+              <option value="g">ADULTO</option>
+            </select>
+          </div>
+
+          <div class="filtros-group">
+            <label for="estado">Estado:</label>
+            <select id="estado">
+              <option value="">Todos os Estados</option>
+              <option value="sp">São Paulo</option>
+              <option value="rj">Rio de Janeiro</option>
+              <option value="ba">Bahia</option>
+            </select>
+          </div>
+
+          <div class="filtros-group">
+            <label for="condicao">Condição:</label>
+            <select id="condicao">
+              <option value="">Todas as Condições</option>
+              <option value="nova">Nova</option>
+              <option value="pouco-uso">Pouco Usada</option>
+              <option value="usada">Usada</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trocas-form">
+      <h3>O que você tem para trocar?</h3>
+      <form id="formTroca">
+        <div class="form-group">
+          <label for="fantasia-oferecida">Fantasia que você tem:</label>
+          <input type="text" id="fantasia-oferecida" placeholder="Ex: Super-Herói reciclado" required>
+        </div>
+
+        <div class="form-group">
+          <label for="fantasia-desejada">Fantasia que deseja:</label>
+          <input type="text" id="fantasia-desejada" placeholder="Ex: Fantasia de Carnaval" required>
+        </div>
+
+        <div class="form-group">
+          <label for="local">Sua localização:</label>
+          <input type="text" id="local" placeholder="Cidade/Estado" required>
+        </div>
+
+        <button type="submit" class="btn primary">
+          <i class="fas fa-search"></i> Buscar Trocas
+        </button>
+      </form>
+    </div>
+
+    <div class="trocas-lista" id="trocasLista">
+      <!-- Conteúdo dinâmico será inserido aqui via JavaScript -->
+    </div>
+
+    <div class="paginacao" id="paginacao">
+      <!-- Paginação será gerada via JavaScript -->
+    </div>
+  </div>
+
+  <!-- Modal de Solicitação de Troca -->
+  <div class="modal" id="modalSolicitacao">
+    <div class="modal-content modal-solicitacao">
+      <div class="modal-header">
+        <h3>Solicitar Troca</h3>
+        <span class="close-modal">&times;</span>
+      </div>
+      <div class="modal-body">
+        <p>Você está solicitando trocar <strong id="modalFantasiaOferecida">sua fantasia</strong> por <strong id="modalFantasiaDesejada">a fantasia selecionada</strong>.</p>
+        <p>Deseja enviar uma mensagem para o anunciante?</p>
+        <textarea id="mensagemTroca" placeholder="Olá, gostaria de propor esta troca..." rows="4"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn secondary" id="cancelarSolicitacao">Cancelar</button>
+        <button class="btn primary" id="confirmarSolicitacao">Enviar Solicitação</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <div class="logo">
+            <img src="logo.png" alt="Eco-Folia Logo">
+            <h2>Eco-Folia</h2>
+          </div>
+          <p>Fantasia Consciente, Festa Sustentável</p>
+        </div>
+        <div class="footer-section">
+          <h3>Links</h3>
+          <ul>
+            <li><a href="index.html#hero">Início</a></li>
+            <li><a href="index.html#fantasias">Fantasias</a></li>
+            <li><a href="trocas.html">Trocas</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Eco-Folia. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="trocas.js"></script>
+</body>
+</html>
