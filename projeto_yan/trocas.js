@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const itemsPerPage = 6;
     let allItems = [];
     let favoritos = JSON.parse(localStorage.getItem('favoritosTrocas')) || [];
+    let currentUser = null;
 
     // --- DADOS DE EXEMPLO (substituir por API real) ---
     const mockData = [
@@ -54,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             id: 3,
             titulo: "Fantasia Tribal",
-            imagem: "https://images.unsplash.com/photo-1544927233-a1288219662b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1974&q=80",
+            imagem: "https://www.conexaolusofona.org/wp-content/uploads/2019/02/carnaval-sustent%C3%A1vel-750x500.jpg",
             descricao: "Fantasia leve e artesanal, inspirada em tema tribal. Perfeita para eventos culturais e festas a fantasia.",
             usuario: "Camila S.",
             localizacao: "Rio de Janeiro, RJ",
@@ -70,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             id: 4,
             titulo: "Fantasia de Super-Herói Ecológica",
-            imagem: "https://images.unsplash.com/photo-1531259683007-016a7b628fc3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1974&q=80",
+            imagem: "https://img.freepik.com/fotos-gratis/garota-jovem-super-heroina-caucasiana-seria-usando-mascara-de-maos-dadas-na-cintura-olhando-para-a-camera-com-olhar-serio_141793-77062.jpg?semt=ais_incoming&w=740&q=80",
             descricao: "Fantasia de super-herói feita com materiais reciclados. Capa incluída.",
             usuario: "Carlos M.",
             localizacao: "São Paulo, SP",
@@ -86,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             id: 5,
             titulo: "Fantasia de Fada Sustentável",
-            imagem: "https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1974&q=80",
+            imagem: "https://fantasiainfantil.com/cdn/shop/products/fantasia-fada-sininho-verde-infantil-543532.webp?v=1709772389",
             descricao: "Fantasia de fada com asas removíveis. Feita com tecidos orgânicos e materiais reciclados.",
             usuario: "Mariana L.",
             localizacao: "Porto Alegre, RS",
@@ -94,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
             categoria: "filmes",
             tamanho: "p",
             estado: "rs",
-            condicao: "usada",
             rating: 4.7,
             status: "disponivel",
             destaque: true
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             id: 6,
             titulo: "Fantasia de Pirata Reciclado",
-            imagem: "https://images.unsplash.com/photo-1570215171328-49d885742ab4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1974&q=80",
+            imagem: "https://cdn0.umcomo.com.br/pt/posts/3/2/6/como_fazer_uma_fantasia_caseira_de_pirata_para_o_carnaval_623_600_square.jpg",
             descricao: "Fantasia completa de pirata com acessórios em material reciclado. Incluí chapéu e tapa-olho.",
             usuario: "Ricardo A.",
             localizacao: "Belo Horizonte, MG",
@@ -117,10 +117,242 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
+    // --- MODAL DE LOGIN/CADASTRO ---
+    function createAuthModal() {
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.id = 'authModal';
+        modal.innerHTML = `
+            <div class="modal-content modal-auth">
+                <div class="modal-header">
+                    <h3>Entrar na Eco-Folia</h3>
+                    <span class="close-modal">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="auth-tabs">
+                        <button class="auth-tab active" data-tab="login">Login</button>
+                        <button class="auth-tab" data-tab="signup">Cadastrar</button>
+                    </div>
+                    
+                    <form id="loginForm" class="auth-form active">
+                        <div class="form-group">
+                            <label for="loginEmail">E-mail:</label>
+                            <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Senha:</label>
+                            <input type="password" id="loginPassword" placeholder="Sua senha" required>
+                        </div>
+                        <button type="submit" class="btn primary full-width">
+                            <i class="fas fa-sign-in-alt"></i> Entrar
+                        </button>
+                    </form>
+                    
+                    <form id="signupForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="signupNome">Nome:</label>
+                            <input type="text" id="signupNome" placeholder="Seu nome completo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupEmail">E-mail:</label>
+                            <input type="email" id="signupEmail" placeholder="seu@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupPassword">Senha:</label>
+                            <input type="password" id="signupPassword" placeholder="Mínimo 6 caracteres" required minlength="6">
+                        </div>
+                        <button type="submit" class="btn primary full-width">
+                            <i class="fas fa-user-plus"></i> Cadastrar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        setupAuthModal();
+    }
+
+    function setupAuthModal() {
+        const modal = document.getElementById('authModal');
+        const closeBtn = modal.querySelector('.close-modal');
+        const tabs = modal.querySelectorAll('.auth-tab');
+        const forms = modal.querySelectorAll('.auth-form');
+        
+        // Alternar entre login e cadastro
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.getAttribute('data-tab');
+                
+                // Ativar tab
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Mostrar form correspondente
+                forms.forEach(form => form.classList.remove('active'));
+                document.getElementById(`${tabName}Form`).classList.add('active');
+            });
+        });
+        
+        // Fechar modal
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('show');
+        });
+        
+        // Fechar ao clicar fora
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('show');
+            }
+        });
+        
+        // Formulário de login
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                // Importar e usar as funções de auth
+                const authModule = await import('./auth.js');
+                await authModule.signIn(email, password);
+                modal.classList.remove('show');
+                
+                // Atualizar usuário atual
+                currentUser = authModule.getCurrentUser ? authModule.getCurrentUser() : { email: email };
+                updateUIForAuthStatus();
+                renderItems(); // Re-renderizar para atualizar botões
+                
+            } catch (error) {
+                console.error('Erro no login:', error);
+            }
+        });
+        
+        // Formulário de cadastro
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nome = document.getElementById('signupNome').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            
+            try {
+                // Importar e usar as funções de auth
+                const authModule = await import('./auth.js');
+                await authModule.signUp(email, password, { nome });
+                modal.classList.remove('show');
+                
+                // Atualizar usuário atual
+                currentUser = authModule.getCurrentUser ? authModule.getCurrentUser() : { email: email };
+                updateUIForAuthStatus();
+                renderItems(); // Re-renderizar para atualizar botões
+                
+            } catch (error) {
+                console.error('Erro no cadastro:', error);
+            }
+        });
+    }
+
+    // --- FUNÇÕES DE AUTENTICAÇÃO PARA TROCAS ---
+    async function checkAuthBeforeAction(actionCallback, itemId = null) {
+        try {
+            // Tentar obter o usuário do Firebase
+            const authModule = await import('./auth.js');
+            const user = authModule.getCurrentUser ? authModule.getCurrentUser() : currentUser;
+            
+            if (!user) {
+                // Mostrar modal de autenticação
+                const authModal = document.getElementById('authModal');
+                if (authModal) {
+                    authModal.classList.add('show');
+                }
+                return false;
+            }
+            
+            // Usuário autenticado, executar a ação
+            return actionCallback(user, itemId);
+        } catch (error) {
+            console.error('Erro ao verificar autenticação:', error);
+            return false;
+        }
+    }
+
+    // --- ATUALIZAR A RENDERIZAÇÃO PARA MOSTRAR STATUS DE LOGIN ---
+    async function updateUIForAuthStatus() {
+    try {
+        const authModule = await import('./auth.js');
+        currentUser = authModule.getCurrentUser ? authModule.getCurrentUser() : null;
+    } catch (error) {
+        console.log('Módulo de auth não disponível, usando fallback');
+    }
+    
+    const headerRight = document.querySelector('.header-right');
+    
+    // Remover elementos de auth existentes
+    const existingAuthElements = document.querySelectorAll('.auth-status');
+    existingAuthElements.forEach(el => el.remove());
+    
+    if (currentUser) {
+        // Usuário logado - mostrar informações do usuário
+        const authStatus = document.createElement('div');
+        authStatus.className = 'auth-status';
+        authStatus.innerHTML = `
+            <div class="user-menu">
+                <span class="user-greeting">Olá, ${currentUser.email ? currentUser.email.split('@')[0] : 'Usuário'}</span>
+                <button class="btn small secondary" id="logoutBtnTrocas">
+                    <i class="fas fa-sign-out-alt"></i> <span>Sair</span>
+                </button>
+            </div>
+        `;
+        
+        // Inserir antes do botão do menu mobile
+        const mobileBtn = headerRight.querySelector('.mobile-menu-btn');
+        headerRight.insertBefore(authStatus, mobileBtn);
+        
+        // Event listener para logout
+        document.getElementById('logoutBtnTrocas').addEventListener('click', async () => {
+            try {
+                const authModule = await import('./auth.js');
+                if (authModule.logout) {
+                    await authModule.logout();
+                }
+                currentUser = null;
+                updateUIForAuthStatus();
+                renderItems(); // Re-renderizar para atualizar botões
+            } catch (error) {
+                console.error('Erro no logout:', error);
+            }
+        });
+        
+    } else {
+        // Usuário não logado - mostrar botão de login
+        const authStatus = document.createElement('div');
+        authStatus.className = 'auth-status';
+        authStatus.innerHTML = `
+            <button class="btn small primary" id="loginBtnTrocas">
+                <i class="fas fa-sign-in-alt"></i> <span>Entrar</span>
+            </button>
+        `;
+        
+        // Inserir antes do botão do menu mobile
+        const mobileBtn = headerRight.querySelector('.mobile-menu-btn');
+        headerRight.insertBefore(authStatus, mobileBtn);
+        
+        // Event listener para login
+        document.getElementById('loginBtnTrocas').addEventListener('click', () => {
+            const authModal = document.getElementById('authModal');
+            if (authModal) {
+                authModal.classList.add('show');
+            }
+        });
+    }
+}
+
     // --- INICIALIZAÇÃO ---
     allItems = mockData;
+    createAuthModal(); // Criar modal de autenticação
     renderItems();
     setupEventListeners();
+    updateUIForAuthStatus(); // Atualizar UI baseada no status de autenticação
 
     // --- CONFIGURAÇÃO DE EVENT LISTENERS ---
     function setupEventListeners() {
@@ -137,7 +369,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (filtrosToggle && filtrosContent) {
             filtrosToggle.addEventListener('click', () => {
                 filtrosContent.style.display = filtrosContent.style.display === 'none' ? 'grid' : 'none';
-                document.querySelector('.filtros-toggle').classList.toggle('rotated');
+                const toggleIcon = document.querySelector('.filtros-toggle');
+                if (toggleIcon) {
+                    toggleIcon.classList.toggle('rotated');
+                }
             });
         }
 
@@ -206,8 +441,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleSolicitacaoTroca() {
+        if (!currentUser) {
+            alert('Você precisa estar logado para solicitar uma troca.');
+            return;
+        }
+
         const mensagem = document.getElementById('mensagemTroca').value;
-        alert(`Solicitação de troca enviada com sucesso! Mensagem: ${mensagem || 'Nenhuma mensagem adicional'}`);
+        alert(`Solicitação de troca enviada com sucesso! Mensagem: ${mensagem || 'Nenhuma mensagem adicional'}\nUsuário: ${currentUser.email}`);
         
         // Fechar o modal
         document.getElementById('modalSolicitacao').classList.remove('show');
@@ -217,34 +457,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function toggleFavorito(itemId) {
-        const index = favoritos.indexOf(itemId);
-        
-        if (index === -1) {
-            // Adicionar aos favoritos
-            favoritos.push(itemId);
-        } else {
-            // Remover dos favoritos
-            favoritos.splice(index, 1);
-        }
-        
-        // Salvar no localStorage
-        localStorage.setItem('favoritosTrocas', JSON.stringify(favoritos));
-        
-        // Atualizar a exibição
-        renderItems();
+        return checkAuthBeforeAction((user, itemId) => {
+            const index = favoritos.indexOf(itemId);
+            
+            if (index === -1) {
+                // Adicionar aos favoritos
+                favoritos.push(itemId);
+            } else {
+                // Remover dos favoritos
+                favoritos.splice(index, 1);
+            }
+            
+            // Salvar no localStorage
+            localStorage.setItem('favoritosTrocas', JSON.stringify(favoritos));
+            
+            // Atualizar a exibição
+            renderItems();
+            return true;
+        }, itemId);
     }
 
     function solicitarTroca(itemId) {
-        const item = allItems.find(i => i.id === itemId);
-        if (!item) return;
-        
-        // Preencher modal com informações
-        document.getElementById('modalFantasiaOferecida').textContent = 
-            document.getElementById('fantasia-oferecida').value || 'sua fantasia';
-        document.getElementById('modalFantasiaDesejada').textContent = item.titulo;
-        
-        // Mostrar modal
-        document.getElementById('modalSolicitacao').classList.add('show');
+        return checkAuthBeforeAction((user, itemId) => {
+            const item = allItems.find(i => i.id === itemId);
+            if (!item) return false;
+            
+            // Preencher modal com informações
+            document.getElementById('modalFantasiaOferecida').textContent = 
+                document.getElementById('fantasia-oferecida').value || 'sua fantasia';
+            document.getElementById('modalFantasiaDesejada').textContent = item.titulo;
+            
+            // Mostrar modal de solicitação
+            document.getElementById('modalSolicitacao').classList.add('show');
+            return true;
+        }, itemId);
     }
 
     // --- FUNÇÕES DE RENDERIZAÇÃO ---
@@ -310,7 +556,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span><i class="fas fa-arrows-alt-h"></i> Troca por: ${item.trocaPor}</span>
                         <span class="status-troca ${statusClass}">${statusText}</span>
                     </div>
-                    <button class="btn small primary solicitar-troca" data-id="${item.id}">Solicitar Troca</button>
+                    <button class="btn small primary solicitar-troca" data-id="${item.id}">
+                        ${currentUser ? 'Solicitar Troca' : 'Faça login para trocar'}
+                    </button>
                 </div>
             `;
             

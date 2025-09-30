@@ -122,19 +122,22 @@ section {
 }
 
 /* Header e Navegação */
-header {
-    background-color: var(--white);
-    box-shadow: var(--shadow);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    padding: 15px 0;
+header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.auth-status {
+  display: flex;
+  align-items: center;
 }
 
 .logo {
@@ -745,29 +748,6 @@ footer .logo h2 {
     align-items: center;
     justify-content: center;
     transition: var(--transition);
-}
-
-.theme-toggle:hover {
-    background: var(--primary-dark);
-}
-
-body.dark-theme {
-    --light: #1a2a1a;
-    --dark: #e0f0e0;
-    --white: #213321;
-    --gray: #243524;
-}
-
-body.dark-theme header {
-    background-color: var(--gray);
-}
-
-body.dark-theme .fantasia-card,
-body.dark-theme .step,
-body.dark-theme .beneficio-card,
-body.dark-theme .avaliacao-card {
-    background-color: var(--gray);
-    color: var(--dark);
 }
 
 .animate-in {

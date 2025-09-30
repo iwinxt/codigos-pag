@@ -14,6 +14,172 @@
   --trocas-gradient: linear-gradient(135deg, var(--trocas-primary) 0%, var(--trocas-secondary) 100%);
 }
 
+/* Estilos para autenticação */
+/* ESTRUTURA DO HEADER */
+body#trocas-page header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+/* Estilos para autenticação - POSICIONAMENTO À DIREITA */
+.auth-status {
+  display: flex;
+  align-items: center;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-greeting {
+  color: var(--trocas-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Estilo do botão de login */
+#loginBtnTrocas {
+  background: var(--trocas-primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+#loginBtnTrocas:hover {
+  background: var(--trocas-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(58, 124, 165, 0.3);
+}
+
+
+@media (max-width: 480px) {
+  .header-right {
+    gap: 10px;
+  }
+  
+  #loginBtnTrocas,
+  #logoutBtnTrocas {
+    padding: 8px 12px;
+  }
+}
+
+/* Modal de autenticação */
+.modal-auth .modal-content {
+  max-width: 400px;
+  padding: 0;
+}
+
+.auth-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--trocas-border);
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 15px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--trocas-dark);
+  opacity: 0.7;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid transparent;
+}
+
+.auth-tab.active {
+  opacity: 1;
+  color: var(--trocas-primary);
+  border-bottom-color: var(--trocas-primary);
+}
+
+.auth-form {
+  padding: 30px;
+  display: none;
+}
+
+.auth-form.active {
+  display: block;
+}
+
+.auth-form .form-group {
+  margin-bottom: 20px;
+}
+
+.auth-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--trocas-dark);
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--trocas-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.auth-form input:focus {
+  border-color: var(--trocas-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(58, 124, 165, 0.2);
+}
+
+.btn.full-width {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Indicador de usuário não logado */
+.fantasia-card .auth-required {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 16px;
+}
+
+.fantasia-card:hover .auth-required {
+  opacity: 1;
+}
+
+.auth-required-message {
+  background: var(--trocas-primary);
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+}
+
 /* Override de estilos gerais para a página de trocas */
 body#trocas-page {
   background-color: var(--trocas-light);
@@ -510,6 +676,9 @@ body#trocas-page nav ul li a.active {
   line-height: 1.6;
 }
 
+
+
+
 /* Modal de solicitação */
 .modal-solicitacao .modal-content {
   padding: 30px;
@@ -677,38 +846,3 @@ body#trocas-page nav ul li a.active {
   }
 }
 
-/* Estilos para modo escuro na página de trocas */
-body#trocas-page.dark-theme {
-  --trocas-light: #1a2a3a;
-  --trocas-dark: #e0f0ff;
-  --trocas-card-bg: #213345;
-  --trocas-border: #2a4055;
-}
-
-body#trocas-page.dark-theme header {
-  background-color: var(--trocas-card-bg);
-}
-
-body#trocas-page.dark-theme .trocas-filtros-container,
-body#trocas-page.dark-theme .trocas-form {
-  background-color: var(--trocas-card-bg);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-}
-
-body#trocas-page.dark-theme .search-bar-trocas input,
-body#trocas-page.dark-theme .filtros-group select,
-body#trocas-page.dark-theme .form-group input {
-  background-color: #1c2b3a;
-  border-color: #2a4055;
-  color: var(--trocas-dark);
-}
-
-body#trocas-page.dark-theme .modal-solicitacao .modal-content {
-  background-color: var(--trocas-card-bg);
-}
-
-body#trocas-page.dark-theme .modal-body textarea {
-  background-color: #1c2b3a;
-  border-color: #2a4055;
-  color: var(--trocas-dark);
-}
