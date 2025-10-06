@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let allItems = [];
     let favoritos = JSON.parse(localStorage.getItem('favoritosTrocas')) || [];
     let currentUser = null;
+    let minhasFantasias = JSON.parse(localStorage.getItem('minhasFantasias')) || [];
 
     // --- DADOS DE EXEMPLO (substituir por API real) ---
     const mockData = [
@@ -34,7 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
             condicao: "pouco-uso",
             rating: 4.5,
             status: "disponivel",
-            destaque: true
+            destaque: true,
+            userId: null // Para fantasias do sistema
         },
         {
             id: 2,
@@ -50,7 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
             condicao: "nova",
             rating: 5,
             status: "disponivel",
-            destaque: false
+            destaque: false,
+            userId: null
         },
         {
             id: 3,
@@ -66,54 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
             condicao: "usada",
             rating: 3.5,
             status: "disponivel",
-            destaque: true
-        },
-        {
-            id: 4,
-            titulo: "Fantasia de Super-Herói Ecológica",
-            imagem: "https://img.freepik.com/fotos-gratis/garota-jovem-super-heroina-caucasiana-seria-usando-mascara-de-maos-dadas-na-cintura-olhando-para-a-camera-com-olhar-serio_141793-77062.jpg?semt=ais_incoming&w=740&q=80",
-            descricao: "Fantasia de super-herói feita com materiais reciclados. Capa incluída.",
-            usuario: "Carlos M.",
-            localizacao: "São Paulo, SP",
-            trocaPor: "Fantasia de Animal",
-            categoria: "super-heroi",
-            tamanho: "g",
-            estado: "sp",
-            condicao: "pouco-uso",
-            rating: 4,
-            status: "pendente",
-            destaque: false
-        },
-        {
-            id: 5,
-            titulo: "Fantasia de Fada Sustentável",
-            imagem: "https://fantasiainfantil.com/cdn/shop/products/fantasia-fada-sininho-verde-infantil-543532.webp?v=1709772389",
-            descricao: "Fantasia de fada com asas removíveis. Feita com tecidos orgânicos e materiais reciclados.",
-            usuario: "Mariana L.",
-            localizacao: "Porto Alegre, RS",
-            trocaPor: "Fantasia de Princesa",
-            categoria: "filmes",
-            tamanho: "p",
-            estado: "rs",
-            rating: 4.7,
-            status: "disponivel",
-            destaque: true
-        },
-        {
-            id: 6,
-            titulo: "Fantasia de Pirata Reciclado",
-            imagem: "https://cdn0.umcomo.com.br/pt/posts/3/2/6/como_fazer_uma_fantasia_caseira_de_pirata_para_o_carnaval_623_600_square.jpg",
-            descricao: "Fantasia completa de pirata com acessórios em material reciclado. Incluí chapéu e tapa-olho.",
-            usuario: "Ricardo A.",
-            localizacao: "Belo Horizonte, MG",
-            trocaPor: "Fantasia de Viking",
-            categoria: "historico",
-            tamanho: "gg",
-            estado: "mg",
-            condicao: "pouco-uso",
-            rating: 4.2,
-            status: "disponivel",
-            destaque: false
+            destaque: true,
+            userId: null
         }
     ];
 
@@ -252,6 +209,159 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- MODAL PARA ADICIONAR FANTASIA ---
+    function setupAddFantasiaModal() {
+        const modal = document.getElementById('modalAddFantasia');
+        const closeBtn = modal.querySelector('.close-modal');
+        const form = document.getElementById('formAddFantasia');
+        const btnAddFantasia = document.getElementById('btnAddFantasia');
+        
+        // Abrir modal
+        if (btnAddFantasia) {
+            btnAddFantasia.addEventListener('click', () => {
+                if (!currentUser) {
+                    // Se não estiver logado, mostrar modal de autenticação
+                    const authModal = document.getElementById('authModal');
+                    if (authModal) {
+                        authModal.classList.add('show');
+                    }
+                    return;
+                }
+                modal.classList.add('show');
+                form.reset();
+            });
+        }
+        
+        // Fechar modal
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('show');
+        });
+        
+        // Fechar ao clicar fora
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('show');
+            }
+        });
+        
+        // Submissão do formulário
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            adicionarFantasia();
+        });
+    }
+
+    function adicionarFantasia() {
+        const form = document.getElementById('formAddFantasia');
+        const formData = new FormData(form);
+        
+        // Validar URL da imagem
+        const imagemUrl = document.getElementById('fantasiaImagem').value;
+        if (!isValidImageUrl(imagemUrl)) {
+            alert('Por favor, insira uma URL válida de imagem (deve começar com http:// ou https://)');
+            return;
+        }
+        
+        // Criar nova fantasia
+        const novaFantasia = {
+            id: Date.now(), // ID único baseado no timestamp
+            titulo: document.getElementById('fantasiaTitulo').value,
+            descricao: document.getElementById('fantasiaDescricao').value,
+            imagem: imagemUrl,
+            usuario: currentUser.email ? currentUser.email.split('@')[0] : 'Usuário',
+            localizacao: document.getElementById('fantasiaLocalizacao').value,
+            trocaPor: document.getElementById('fantasiaTrocaPor').value,
+            categoria: document.getElementById('fantasiaCategoria').value,
+            tamanho: document.getElementById('fantasiaTamanho').value,
+            estado: document.getElementById('fantasiaEstado').value,
+            condicao: document.getElementById('fantasiaCondicao').value,
+            rating: 0, // Nova fantasia sem avaliações
+            status: "disponivel",
+            destaque: false,
+            userId: currentUser.uid || currentUser.email, // Identificar o dono
+            dataCriacao: new Date().toISOString()
+        };
+        
+        // Adicionar à lista de minhas fantasias
+        minhasFantasias.push(novaFantasia);
+        localStorage.setItem('minhasFantasias', JSON.stringify(minhasFantasias));
+        
+        // Fechar modal e mostrar mensagem de sucesso
+        document.getElementById('modalAddFantasia').classList.remove('show');
+        alert('Fantasia anunciada com sucesso!');
+        
+        // Atualizar a lista
+        renderItems();
+    }
+
+    function isValidImageUrl(url) {
+        return url.startsWith('http://') || url.startsWith('https://');
+    }
+
+    // --- FUNÇÕES PARA GERENCIAR MINHAS FANTASIAS ---
+    function editarFantasia(itemId) {
+        const fantasia = minhasFantasias.find(f => f.id === itemId);
+        if (!fantasia) return;
+        
+        // Preencher formulário com dados existentes
+        document.getElementById('fantasiaTitulo').value = fantasia.titulo;
+        document.getElementById('fantasiaDescricao').value = fantasia.descricao;
+        document.getElementById('fantasiaImagem').value = fantasia.imagem;
+        document.getElementById('fantasiaCategoria').value = fantasia.categoria;
+        document.getElementById('fantasiaTamanho').value = fantasia.tamanho;
+        document.getElementById('fantasiaEstado').value = fantasia.estado;
+        document.getElementById('fantasiaCondicao').value = fantasia.condicao;
+        document.getElementById('fantasiaTrocaPor').value = fantasia.trocaPor;
+        document.getElementById('fantasiaLocalizacao').value = fantasia.localizacao;
+        
+        // Abrir modal de edição
+        document.getElementById('modalAddFantasia').classList.add('show');
+        
+        // Remover a fantasia antiga quando salvar
+        const form = document.getElementById('formAddFantasia');
+        const originalSubmit = form.onsubmit;
+        
+        form.onsubmit = function(e) {
+            e.preventDefault();
+            
+            // Atualizar fantasia
+            const index = minhasFantasias.findIndex(f => f.id === itemId);
+            if (index !== -1) {
+                minhasFantasias[index] = {
+                    ...minhasFantasias[index],
+                    titulo: document.getElementById('fantasiaTitulo').value,
+                    descricao: document.getElementById('fantasiaDescricao').value,
+                    imagem: document.getElementById('fantasiaImagem').value,
+                    categoria: document.getElementById('fantasiaCategoria').value,
+                    tamanho: document.getElementById('fantasiaTamanho').value,
+                    estado: document.getElementById('fantasiaEstado').value,
+                    condicao: document.getElementById('fantasiaCondicao').value,
+                    trocaPor: document.getElementById('fantasiaTrocaPor').value,
+                    localizacao: document.getElementById('fantasiaLocalizacao').value
+                };
+                
+                localStorage.setItem('minhasFantasias', JSON.stringify(minhasFantasias));
+                document.getElementById('modalAddFantasia').classList.remove('show');
+                alert('Fantasia atualizada com sucesso!');
+                renderItems();
+            }
+            
+            // Restaurar o event listener original
+            form.onsubmit = originalSubmit;
+        };
+    }
+
+    function excluirFantasia(itemId) {
+        if (!confirm('Tem certeza que deseja excluir esta fantasia?')) {
+            return;
+        }
+        
+        minhasFantasias = minhasFantasias.filter(f => f.id !== itemId);
+        localStorage.setItem('minhasFantasias', JSON.stringify(minhasFantasias));
+        alert('Fantasia excluída com sucesso!');
+        renderItems();
+    }
+
     // --- FUNÇÕES DE AUTENTICAÇÃO PARA TROCAS ---
     async function checkAuthBeforeAction(actionCallback, itemId = null) {
         try {
@@ -278,90 +388,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- ATUALIZAR A RENDERIZAÇÃO PARA MOSTRAR STATUS DE LOGIN ---
     async function updateUIForAuthStatus() {
-    try {
-        const authModule = await import('./auth.js');
-        currentUser = authModule.getCurrentUser ? authModule.getCurrentUser() : null;
-    } catch (error) {
-        console.log('Módulo de auth não disponível, usando fallback');
-    }
-    
-    const headerRight = document.querySelector('.header-right');
-    
-    // Remover elementos de auth existentes
-    const existingAuthElements = document.querySelectorAll('.auth-status');
-    existingAuthElements.forEach(el => el.remove());
-    
-    if (currentUser) {
-        // Usuário logado - mostrar informações do usuário
-        const authStatus = document.createElement('div');
-        authStatus.className = 'auth-status';
-        authStatus.innerHTML = `
-            <div class="user-menu">
-                <span class="user-greeting">Olá, ${currentUser.email ? currentUser.email.split('@')[0] : 'Usuário'}</span>
-                <button class="btn small secondary" id="logoutBtnTrocas">
-                    <i class="fas fa-sign-out-alt"></i> <span>Sair</span>
-                </button>
-            </div>
-        `;
+        try {
+            const authModule = await import('./auth.js');
+            currentUser = authModule.getCurrentUser ? authModule.getCurrentUser() : null;
+        } catch (error) {
+            console.log('Módulo de auth não disponível, usando fallback');
+        }
         
-        // Inserir antes do botão do menu mobile
-        const mobileBtn = headerRight.querySelector('.mobile-menu-btn');
-        headerRight.insertBefore(authStatus, mobileBtn);
+        const authStatus = document.getElementById('authStatus');
+        if (!authStatus) return;
         
-        // Event listener para logout
-        document.getElementById('logoutBtnTrocas').addEventListener('click', async () => {
-            try {
-                const authModule = await import('./auth.js');
-                if (authModule.logout) {
-                    await authModule.logout();
+        authStatus.innerHTML = '';
+        
+        if (currentUser) {
+            // Usuário logado - mostrar informações do usuário
+            authStatus.innerHTML = `
+                <div class="user-menu">
+                    <span class="user-greeting">Olá, ${currentUser.email ? currentUser.email.split('@')[0] : 'Usuário'}</span>
+                    <button class="btn small secondary" id="logoutBtnTrocas">
+                        <i class="fas fa-sign-out-alt"></i> <span>Sair</span>
+                    </button>
+                </div>
+            `;
+            
+            // Event listener para logout
+            document.getElementById('logoutBtnTrocas').addEventListener('click', async () => {
+                try {
+                    const authModule = await import('./auth.js');
+                    if (authModule.logout) {
+                        await authModule.logout();
+                    }
+                    currentUser = null;
+                    updateUIForAuthStatus();
+                    renderItems(); // Re-renderizar para atualizar botões
+                } catch (error) {
+                    console.error('Erro no logout:', error);
                 }
-                currentUser = null;
-                updateUIForAuthStatus();
-                renderItems(); // Re-renderizar para atualizar botões
-            } catch (error) {
-                console.error('Erro no logout:', error);
-            }
-        });
-        
-    } else {
-        // Usuário não logado - mostrar botão de login
-        const authStatus = document.createElement('div');
-        authStatus.className = 'auth-status';
-        authStatus.innerHTML = `
-            <button class="btn small primary" id="loginBtnTrocas">
-                <i class="fas fa-sign-in-alt"></i> <span>Entrar</span>
-            </button>
-        `;
-        
-        // Inserir antes do botão do menu mobile
-        const mobileBtn = headerRight.querySelector('.mobile-menu-btn');
-        headerRight.insertBefore(authStatus, mobileBtn);
-        
-        // Event listener para login
-        document.getElementById('loginBtnTrocas').addEventListener('click', () => {
-            const authModal = document.getElementById('authModal');
-            if (authModal) {
-                authModal.classList.add('show');
-            }
-        });
+            });
+            
+        } else {
+            // Usuário não logado - mostrar botão de login
+            authStatus.innerHTML = `
+                <button class="btn small primary" id="loginBtnTrocas">
+                    <i class="fas fa-sign-in-alt"></i> <span>Entrar</span>
+                </button>
+            `;
+            
+            // Event listener para login
+            document.getElementById('loginBtnTrocas').addEventListener('click', () => {
+                const authModal = document.getElementById('authModal');
+                if (authModal) {
+                    authModal.classList.add('show');
+                }
+            });
+        }
     }
-}
 
     // --- INICIALIZAÇÃO ---
-    allItems = mockData;
+    allItems = [...mockData, ...minhasFantasias];
     createAuthModal(); // Criar modal de autenticação
+    setupAddFantasiaModal(); // Configurar modal de adicionar fantasia
     renderItems();
     setupEventListeners();
     updateUIForAuthStatus(); // Atualizar UI baseada no status de autenticação
 
     // --- CONFIGURAÇÃO DE EVENT LISTENERS ---
     function setupEventListeners() {
-        // Validação de formulário
-        const trocasForm = document.getElementById('formTroca');
-        if (trocasForm) {
-            trocasForm.addEventListener('submit', handleFormSubmit);
-        }
-
         // Filtros avançados
         const filtrosToggle = document.getElementById('filtrosToggle');
         const filtrosContent = document.getElementById('filtrosContent');
@@ -424,22 +516,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- HANDLERS DE EVENTOS ---
-    function handleFormSubmit(e) {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const fantasiaOferecida = formData.get('fantasia-oferecida');
-        const fantasiaDesejada = formData.get('fantasia-desejada');
-        const localizacao = formData.get('local');
-
-        if (!fantasiaOferecida || !fantasiaDesejada || !localizacao) {
-            alert('Por favor, preencha todos os campos obrigatórios.');
-            return;
-        }
-
-        // Simular busca com os critérios fornecidos
-        aplicarFiltros();
-    }
-
     function handleSolicitacaoTroca() {
         if (!currentUser) {
             alert('Você precisa estar logado para solicitar uma troca.');
@@ -483,8 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!item) return false;
             
             // Preencher modal com informações
-            document.getElementById('modalFantasiaOferecida').textContent = 
-                document.getElementById('fantasia-oferecida').value || 'sua fantasia';
+            document.getElementById('modalFantasiaOferecida').textContent = 'sua fantasia';
             document.getElementById('modalFantasiaDesejada').textContent = item.titulo;
             
             // Mostrar modal de solicitação
@@ -499,6 +574,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const paginacao = document.getElementById('paginacao');
         
         if (!trocasLista) return;
+        
+        // Combinar dados mock com minhas fantasias
+        allItems = [...mockData, ...minhasFantasias];
         
         // Aplicar filtros e paginação
         const filteredItems = filtrarItems();
@@ -525,6 +603,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Renderizar items
         paginatedItems.forEach(item => {
             const isFavorito = favoritos.includes(item.id);
+            const isMinhaFantasia = item.userId && currentUser && 
+                                   (item.userId === currentUser.uid || item.userId === currentUser.email);
             const ratingStars = renderRatingStars(item.rating);
             
             const statusClass = `status-${item.status}`;
@@ -538,11 +618,12 @@ document.addEventListener('DOMContentLoaded', () => {
             card.className = 'fantasia-card';
             card.innerHTML = `
                 <div class="fantasia-img">
-                    <img src="${item.imagem}" alt="${item.titulo}">
+                    <img src="${item.imagem}" alt="${item.titulo}" onerror="this.src='https://via.placeholder.com/300x200?text=Imagem+Indispon%C3%ADvel'">
                     <button class="favorito-btn ${isFavorito ? 'favoritado' : ''}" data-id="${item.id}">
                         <i class="fas fa-heart"></i>
                     </button>
                     ${item.destaque ? '<div class="card-badge destaque">Destaque</div>' : ''}
+                    ${isMinhaFantasia ? '<div class="card-badge minha-fantasia">Minha</div>' : ''}
                     <div class="card-badge">${item.condicao === 'nova' ? 'Nova' : item.condicao === 'pouco-uso' ? 'Pouco uso' : 'Usada'}</div>
                 </div>
                 <div class="fantasia-info">
@@ -556,10 +637,29 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span><i class="fas fa-arrows-alt-h"></i> Troca por: ${item.trocaPor}</span>
                         <span class="status-troca ${statusClass}">${statusText}</span>
                     </div>
-                    <button class="btn small primary solicitar-troca" data-id="${item.id}">
-                        ${currentUser ? 'Solicitar Troca' : 'Faça login para trocar'}
-                    </button>
+                    ${isMinhaFantasia ? 
+                        `<div class="minhas-fantasias-actions">
+                            <button class="btn-edit" data-id="${item.id}">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button class="btn-delete" data-id="${item.id}">
+                                <i class="fas fa-trash"></i> Excluir
+                            </button>
+                        </div>` :
+                        `<button class="btn small primary solicitar-troca" data-id="${item.id}">
+                            ${currentUser ? 'Solicitar Troca' : 'Faça login para trocar'}
+                        </button>`
+                    }
                 </div>
+                ${!currentUser ? `
+                    <div class="auth-required-overlay">
+                        <div class="auth-required-message">
+                            <i class="fas fa-lock"></i>
+                            <h4>Login Necessário</h4>
+                            <p>Faça login para solicitar trocas</p>
+                        </div>
+                    </div>
+                ` : ''}
             `;
             
             trocasLista.appendChild(card);
@@ -580,6 +680,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     e.stopPropagation();
                     const itemId = parseInt(btn.getAttribute('data-id'));
                     solicitarTroca(itemId);
+                });
+            });
+            
+            // Eventos para minhas fantasias
+            document.querySelectorAll('.btn-edit').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const itemId = parseInt(btn.getAttribute('data-id'));
+                    editarFantasia(itemId);
+                });
+            });
+            
+            document.querySelectorAll('.btn-delete').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const itemId = parseInt(btn.getAttribute('data-id'));
+                    excluirFantasia(itemId);
                 });
             });
         }, 0);
@@ -665,11 +782,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const estado = document.getElementById('estado').value;
         const condicao = document.getElementById('condicao').value;
         
-        // Obter valores do formulário de busca
-        const fantasiaOferecida = document.getElementById('fantasia-oferecida').value.toLowerCase();
-        const fantasiaDesejada = document.getElementById('fantasia-desejada').value.toLowerCase();
-        const localizacao = document.getElementById('local').value.toLowerCase();
-        
         return allItems.filter(item => {
             // Filtro de busca geral
             if (searchTerm && 
@@ -697,16 +809,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Filtro de condição
             if (condicao && item.condicao !== condicao) {
-                return false;
-            }
-            
-            // Filtro por fantasia desejada (do formulário)
-            if (fantasiaDesejada && !item.titulo.toLowerCase().includes(fantasiaDesejada)) {
-                return false;
-            }
-            
-            // Filtro por localização (do formulário)
-            if (localizacao && !item.localizacao.toLowerCase().includes(localizacao)) {
                 return false;
             }
             

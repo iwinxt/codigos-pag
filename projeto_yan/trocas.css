@@ -1,19 +1,4 @@
-
-
-/* Variáveis específicas para a página de trocas */
-:root {
-  --trocas-primary: #3A7CA5;
-  --trocas-secondary: #81C3D7;
-  --trocas-accent: #FF9F1C;
-  --trocas-light: #F0F7FF;
-  --trocas-dark: #16425B;
-  --trocas-success: #5CB85C;
-  --trocas-warning: #F0AD4E;
-  --trocas-card-bg: #FFFFFF;
-  --trocas-border: #D9E7F8;
-  --trocas-gradient: linear-gradient(135deg, var(--trocas-primary) 0%, var(--trocas-secondary) 100%);
-}
-
+/* trocas.css - COM CORES UNIFICADAS */
 /* Estilos para autenticação */
 /* ESTRUTURA DO HEADER */
 body#trocas-page header .container {
@@ -42,14 +27,14 @@ body#trocas-page header .container {
 }
 
 .user-greeting {
-  color: var(--trocas-primary);
+  color: var(--primary);
   font-weight: 600;
   font-size: 0.9rem;
 }
 
 /* Estilo do botão de login */
 #loginBtnTrocas {
-  background: var(--trocas-primary);
+  background: var(--primary);
   color: white;
   border: none;
   padding: 10px 20px;
@@ -64,11 +49,21 @@ body#trocas-page header .container {
 }
 
 #loginBtnTrocas:hover {
-  background: var(--trocas-dark);
+  background: var(--primary-dark);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(58, 124, 165, 0.3);
+  box-shadow: 0 4px 12px rgba(46, 139, 87, 0.3);
 }
 
+#logoutBtnTrocas {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+}
+
+#logoutBtnTrocas:hover {
+  background-color: var(--primary-dark);
+  color: white;
+}
 
 @media (max-width: 480px) {
   .header-right {
@@ -89,7 +84,7 @@ body#trocas-page header .container {
 
 .auth-tabs {
   display: flex;
-  border-bottom: 1px solid var(--trocas-border);
+  border-bottom: 1px solid var(--gray);
 }
 
 .auth-tab {
@@ -99,7 +94,7 @@ body#trocas-page header .container {
   background: none;
   cursor: pointer;
   font-weight: 600;
-  color: var(--trocas-dark);
+  color: var(--dark);
   opacity: 0.7;
   transition: all 0.3s ease;
   border-bottom: 3px solid transparent;
@@ -107,8 +102,8 @@ body#trocas-page header .container {
 
 .auth-tab.active {
   opacity: 1;
-  color: var(--trocas-primary);
-  border-bottom-color: var(--trocas-primary);
+  color: var(--primary);
+  border-bottom-color: var(--primary);
 }
 
 .auth-form {
@@ -128,22 +123,22 @@ body#trocas-page header .container {
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
-  color: var(--trocas-dark);
+  color: var(--dark);
 }
 
 .auth-form input {
   width: 100%;
   padding: 12px 16px;
-  border: 2px solid var(--trocas-border);
+  border: 2px solid var(--gray);
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.3s ease;
 }
 
 .auth-form input:focus {
-  border-color: var(--trocas-primary);
+  border-color: var(--primary);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(58, 124, 165, 0.2);
+  box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.2);
 }
 
 .btn.full-width {
@@ -172,7 +167,7 @@ body#trocas-page header .container {
 }
 
 .auth-required-message {
-  background: var(--trocas-primary);
+  background: var(--primary);
   color: white;
   padding: 15px 20px;
   border-radius: 8px;
@@ -182,39 +177,39 @@ body#trocas-page header .container {
 
 /* Override de estilos gerais para a página de trocas */
 body#trocas-page {
-  background-color: var(--trocas-light);
-  color: var(--trocas-dark);
+  background-color: var(--light);
+  color: var(--dark);
 }
 
 body#trocas-page header {
-  background-color: var(--trocas-card-bg);
-  box-shadow: 0 4px 12px rgba(58, 124, 165, 0.1);
+  background-color: var(--white);
+  box-shadow: 0 4px 12px rgba(46, 139, 87, 0.1);
 }
 
 body#trocas-page .logo h1 {
-  color: var(--trocas-primary);
+  color: var(--primary);
 }
 
 body#trocas-page nav ul li a {
-  color: var(--trocas-dark);
+  color: var(--dark);
 }
 
 body#trocas-page nav ul li a:hover {
-  color: var(--trocas-primary);
+  color: var(--primary);
 }
 
 body#trocas-page nav ul li a::after {
-  background-color: var(--trocas-primary);
+  background-color: var(--primary);
 }
 
 body#trocas-page nav ul li a.active {
-  color: var(--trocas-primary);
+  color: var(--primary);
   font-weight: 600;
 }
 
 /* Hero section específica para trocas */
 #sistema-trocas-hero {
-  background: var(--trocas-gradient);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
   color: white;
   padding: 80px 0;
   text-align: center;
@@ -253,9 +248,9 @@ body#trocas-page nav ul li a.active {
 
 /* Filtros e busca */
 .trocas-filtros-container {
-  background: var(--trocas-card-bg);
+  background: var(--white);
   border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(58, 124, 165, 0.12);
+  box-shadow: 0 8px 24px rgba(46, 139, 87, 0.12);
   padding: 30px;
   margin: -40px auto 40px;
   position: relative;
@@ -272,23 +267,23 @@ body#trocas-page nav ul li a.active {
 .search-bar-trocas input {
   flex: 1;
   padding: 16px 24px;
-  border: 2px solid var(--trocas-border);
+  border: 2px solid var(--gray);
   border-radius: 50px;
   font-size: 1rem;
   transition: all 0.3s ease;
 }
 
 .search-bar-trocas input:focus {
-  border-color: var(--trocas-primary);
+  border-color: var(--primary);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(58, 124, 165, 0.2);
+  box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.2);
 }
 
 .search-bar-trocas button {
   padding: 16px 32px;
   border: none;
   border-radius: 50px;
-  background-color: var(--trocas-primary);
+  background-color: var(--primary);
   color: white;
   font-weight: 600;
   cursor: pointer;
@@ -299,12 +294,12 @@ body#trocas-page nav ul li a.active {
 }
 
 .search-bar-trocas button:hover {
-  background-color: var(--trocas-dark);
+  background-color: var(--primary-dark);
   transform: translateY(-2px);
 }
 
 .filtros-avancados {
-  border-top: 1px solid var(--trocas-border);
+  border-top: 1px solid var(--gray);
   padding-top: 25px;
 }
 
@@ -318,7 +313,7 @@ body#trocas-page nav ul li a.active {
 
 .filtros-header h3 {
   margin: 0;
-  color: var(--trocas-primary);
+  color: var(--primary);
   font-size: 1.3rem;
 }
 
@@ -336,13 +331,13 @@ body#trocas-page nav ul li a.active {
 
 .filtros-group label {
   font-weight: 600;
-  color: var(--trocas-dark);
+  color: var(--dark);
   font-size: 0.95rem;
 }
 
 .filtros-group select {
   padding: 12px 16px;
-  border: 2px solid var(--trocas-border);
+  border: 2px solid var(--gray);
   border-radius: 8px;
   font-size: 1rem;
   background-color: white;
@@ -350,22 +345,22 @@ body#trocas-page nav ul li a.active {
 }
 
 .filtros-group select:focus {
-  border-color: var(--trocas-primary);
+  border-color: var(--primary);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(58, 124, 165, 0.2);
+  box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.2);
 }
 
 /* Formulário de oferta */
 .trocas-form {
-  background: var(--trocas-card-bg);
+  background: var(--white);
   border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(58, 124, 165, 0.12);
+  box-shadow: 0 8px 24px rgba(46, 139, 87, 0.12);
   padding: 30px;
   margin-bottom: 40px;
 }
 
 .trocas-form h3 {
-  color: var(--trocas-primary);
+  color: var(--primary);
   margin-bottom: 20px;
   font-size: 1.5rem;
   display: flex;
@@ -392,22 +387,22 @@ body#trocas-page nav ul li a.active {
 
 .form-group label {
   font-weight: 600;
-  color: var(--trocas-dark);
+  color: var(--dark);
   font-size: 0.95rem;
 }
 
 .form-group input {
   padding: 14px 16px;
-  border: 2px solid var(--trocas-border);
+  border: 2px solid var(--gray);
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.3s ease;
 }
 
 .form-group input:focus {
-  border-color: var(--trocas-primary);
+  border-color: var(--primary);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(58, 124, 165, 0.2);
+  box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.2);
 }
 
 .trocas-form button {
@@ -417,7 +412,7 @@ body#trocas-page nav ul li a.active {
   padding: 16px 40px;
   border: none;
   border-radius: 50px;
-  background-color: var(--trocas-primary);
+  background-color: var(--primary);
   color: white;
   font-weight: 600;
   cursor: pointer;
@@ -428,9 +423,9 @@ body#trocas-page nav ul li a.active {
 }
 
 .trocas-form button:hover {
-  background-color: var(--trocas-dark);
+  background-color: var(--primary-dark);
   transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(58, 124, 165, 0.3);
+  box-shadow: 0 10px 20px rgba(46, 139, 87, 0.3);
 }
 
 /* Lista de trocas */
@@ -442,10 +437,10 @@ body#trocas-page nav ul li a.active {
 }
 
 .fantasia-card {
-  background: var(--trocas-card-bg);
+  background: var(--white);
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 6px 18px rgba(58, 124, 165, 0.12);
+  box-shadow: 0 6px 18px rgba(46, 139, 87, 0.12);
   transition: all 0.3s ease;
   position: relative;
   display: flex;
@@ -454,7 +449,7 @@ body#trocas-page nav ul li a.active {
 
 .fantasia-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 12px 30px rgba(58, 124, 165, 0.2);
+  box-shadow: 0 12px 30px rgba(46, 139, 87, 0.2);
 }
 
 .fantasia-img {
@@ -498,7 +493,7 @@ body#trocas-page nav ul li a.active {
 }
 
 .favorito-btn.favoritado i {
-  color: var(--trocas-accent);
+  color: var(--accent);
 }
 
 .card-badge {
@@ -513,17 +508,17 @@ body#trocas-page nav ul li a.active {
 }
 
 .card-badge:not(.destaque) {
-  background-color: var(--trocas-primary);
+  background-color: var(--primary);
   color: white;
 }
 
 .card-badge.destaque {
-  background-color: var(--trocas-accent);
-  color: var(--trocas-dark);
+  background-color: var(--accent);
+  color: var(--dark);
 }
 
 .card-badge.new-badge {
-  background-color: var(--trocas-success);
+  background-color: #5CB85C;
   color: white;
 }
 
@@ -543,20 +538,20 @@ body#trocas-page nav ul li a.active {
 
 .fantasia-header h3 {
   margin: 0;
-  color: var(--trocas-dark);
+  color: var(--dark);
   font-size: 1.3rem;
   line-height: 1.3;
   flex: 1;
 }
 
 .rating {
-  color: var(--trocas-accent);
+  color: var(--gold);
   font-size: 0.9rem;
   margin-left: 10px;
 }
 
 .fantasia-desc {
-  color: var(--trocas-dark);
+  color: var(--dark);
   opacity: 0.8;
   margin-bottom: 15px;
   line-height: 1.5;
@@ -568,7 +563,7 @@ body#trocas-page nav ul li a.active {
   flex-direction: column;
   gap: 8px;
   font-size: 0.9rem;
-  color: var(--trocas-dark);
+  color: var(--dark);
   opacity: 0.7;
   margin-bottom: 20px;
 }
@@ -580,7 +575,7 @@ body#trocas-page nav ul li a.active {
 }
 
 .fantasia-meta i {
-  color: var(--trocas-primary);
+  color: var(--primary);
   width: 16px;
 }
 
@@ -595,12 +590,12 @@ body#trocas-page nav ul li a.active {
 
 .status-disponivel {
   background-color: rgba(92, 184, 92, 0.15);
-  color: var(--trocas-success);
+  color: #5CB85C;
 }
 
 .status-pendente {
   background-color: rgba(240, 173, 78, 0.15);
-  color: var(--trocas-warning);
+  color: #F0AD4E;
 }
 
 .status-finalizada {
@@ -628,24 +623,24 @@ body#trocas-page nav ul li a.active {
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  border: 2px solid var(--trocas-border);
+  border: 2px solid var(--gray);
   background: white;
-  color: var(--trocas-dark);
+  color: var(--dark);
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 600;
 }
 
 .pagina-btn:hover {
-  border-color: var(--trocas-primary);
-  color: var(--trocas-primary);
+  border-color: var(--primary);
+  color: var(--primary);
   transform: translateY(-2px);
 }
 
 .pagina-btn.ativa {
-  background: var(--trocas-primary);
+  background: var(--primary);
   color: white;
-  border-color: var(--trocas-primary);
+  border-color: var(--primary);
 }
 
 /* Mensagem de nenhum resultado */
@@ -657,76 +652,75 @@ body#trocas-page nav ul li a.active {
 
 .nenhum-resultado i {
   font-size: 3.5rem;
-  color: var(--trocas-secondary);
+  color: var(--secondary);
   margin-bottom: 20px;
   opacity: 0.7;
 }
 
 .nenhum-resultado h3 {
-  color: var(--trocas-dark);
+  color: var(--dark);
   margin-bottom: 15px;
   font-size: 1.5rem;
 }
 
 .nenhum-resultado p {
-  color: var(--trocas-dark);
+  color: var(--dark);
   opacity: 0.7;
   max-width: 500px;
   margin: 0 auto;
   line-height: 1.6;
 }
 
-
-
-
 /* Modal de solicitação */
 .modal-solicitacao .modal-content {
-  padding: 30px;
+  padding: 40px 30px; 
   border-radius: 16px;
-  background: var(--trocas-card-bg);
+  background: var(--white);
   max-width: 500px;
   width: 90%;
 }
 
 .modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  margin-top: 20px;
+  margin-bottom: 25px; 
   padding-bottom: 15px;
-  border-bottom: 1px solid var(--trocas-border);
+  border-bottom: 1px solid var(--gray);
 }
 
 .modal-header h3 {
-  margin: 0;
-  color: var(--trocas-primary);
+  margin-left: 10px;
+  color: var(--primary);
   font-size: 1.5rem;
 }
 
 .close-modal {
   font-size: 1.8rem;
-  color: var(--trocas-dark);
+  color: var(--dark);
   cursor: pointer;
   transition: color 0.3s ease;
 }
 
 .close-modal:hover {
-  color: var(--trocas-accent);
+  color: var(--accent);
 }
 
 .modal-body {
   margin-bottom: 25px;
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 .modal-body p {
   margin-bottom: 15px;
   line-height: 1.6;
+  margin-left: 10px;
+  
 }
 
 .modal-body textarea {
   width: 100%;
   padding: 14px;
-  border: 2px solid var(--trocas-border);
+  border: 2px solid var(--gray);
   border-radius: 8px;
   font-family: inherit;
   font-size: 1rem;
@@ -736,7 +730,7 @@ body#trocas-page nav ul li a.active {
 }
 
 .modal-body textarea:focus {
-  border-color: var(--trocas-primary);
+  border-color: var(--primary);
   outline: none;
 }
 
@@ -747,7 +741,8 @@ body#trocas-page nav ul li a.active {
 }
 
 .modal-footer .btn {
-  padding: 12px 24px;
+  margin: 5px;
+  padding: 12px 20px;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
@@ -756,24 +751,24 @@ body#trocas-page nav ul li a.active {
 
 .modal-footer .btn.secondary {
   background: transparent;
-  border: 2px solid var(--trocas-border);
-  color: var(--trocas-dark);
+  border: 2px solid var(--gray);
+  color: var(--dark);
 }
 
 .modal-footer .btn.secondary:hover {
-  border-color: var(--trocas-primary);
-  color: var(--trocas-primary);
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
 .modal-footer .btn.primary {
-  background: var(--trocas-primary);
-  border: 2px solid var(--trocas-primary);
+  background: var(--primary);
+  border: 2px solid var(--primary);
   color: white;
 }
 
 .modal-footer .btn.primary:hover {
-  background: var(--trocas-dark);
-  border-color: var(--trocas-dark);
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
   transform: translateY(-2px);
 }
 
@@ -786,7 +781,7 @@ body#trocas-page nav ul li a.active {
 
 .fantasia-card.highlight {
   animation: trocasPulse 1s ease;
-  box-shadow: 0 0 0 3px var(--trocas-accent);
+  box-shadow: 0 0 0 3px var(--accent);
 }
 
 /* Responsividade para página de trocas */
@@ -846,3 +841,194 @@ body#trocas-page nav ul li a.active {
   }
 }
 
+/* Adicionar estas regras ao arquivo trocas.css existente */
+
+/* Seção de adicionar fantasia */
+.add-fantasia-section {
+  text-align: center;
+  margin: 55px 0;
+}
+
+.add-fantasia-section .btn {
+  padding: 15px 30px;
+  font-size: 1.1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.add-fantasia-section .btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(46, 139, 87, 0.3);
+}
+
+/* Modal de anúncio */
+.modal-anuncio .modal-content {
+  max-width: 600px;
+  padding: 0;
+  border-radius: 16px;
+  background: var(--white);
+}
+
+.modal-anuncio .modal-header {
+  padding: 25px 30px 0;
+  border-bottom: 1px solid var(--gray);
+}
+
+.modal-anuncio .modal-body {
+  padding: 25px 30px 30px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.modal-anuncio .form-group {
+  margin-bottom: 20px;
+}
+
+.modal-anuncio label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--dark);
+  font-size: 0.95rem;
+}
+
+.modal-anuncio input,
+.modal-anuncio select,
+.modal-anuncio textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--gray);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.modal-anuncio input:focus,
+.modal-anuncio select:focus,
+.modal-anuncio textarea:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.2);
+}
+
+.modal-anuncio textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.modal-anuncio .btn.full-width {
+  width: 100%;
+  margin-top: 10px;
+  padding: 15px;
+  font-size: 1.1rem;
+}
+
+/* Indicador de usuário não logado */
+.auth-required-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.fantasia-card:hover .auth-required-overlay {
+  opacity: 1;
+}
+
+.auth-required-message {
+  background: var(--primary);
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 80%;
+}
+
+.auth-required-message i {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.auth-required-message h4 {
+  margin: 0 0 10px;
+  font-size: 1.2rem;
+}
+
+.auth-required-message p {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 0.9rem;
+}
+
+/* Botões de ação na fantasia do usuário */
+.minhas-fantasias-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.btn-edit {
+  background: #F0AD4E;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.btn-delete {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.btn-edit:hover {
+  background: #e0a800;
+  transform: translateY(-2px);
+}
+
+.btn-delete:hover {
+  background: #c82333;
+  transform: translateY(-2px);
+}
+
+/* Badge para minhas fantasias */
+.card-badge.minha-fantasia {
+  background-color: #5CB85C;
+  color: white;
+}
+
+/* Responsividade para modais */
+@media (max-width: 768px) {
+  .modal-anuncio .modal-content {
+    margin: 20px;
+    width: calc(100% - 40px);
+  }
+  
+  .modal-anuncio .modal-body {
+    padding: 20px;
+  }
+  
+  .minhas-fantasias-actions {
+    flex-direction: column;
+  }
+}
