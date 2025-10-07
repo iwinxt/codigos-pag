@@ -772,6 +772,111 @@ body#trocas-page nav ul li a.active {
   transform: translateY(-2px);
 }
 
+/* Estilos para upload de imagem */
+.image-upload-container {
+    margin-top: 10px;
+}
+
+.image-upload-area {
+    border: 2px dashed var(--primary);
+    border-radius: 12px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: rgba(46, 139, 87, 0.05);
+}
+
+.image-upload-area:hover {
+    background-color: rgba(46, 139, 87, 0.1);
+    border-color: var(--primary-dark);
+}
+
+.image-upload-area i {
+    font-size: 3rem;
+    color: var(--primary);
+    margin-bottom: 15px;
+    display: block;
+}
+
+.image-upload-area p {
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.image-upload-area span {
+    color: var(--dark);
+    opacity: 0.7;
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.image-upload-area small {
+    color: var(--dark);
+    opacity: 0.5;
+    font-size: 0.8rem;
+}
+
+.image-preview {
+    position: relative;
+    margin-top: 15px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.image-preview img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.btn-remove-image {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    color: var(--accent);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.btn-remove-image:hover {
+    background: var(--white);
+    transform: scale(1.1);
+}
+
+/* Estados de drag & drop */
+.image-upload-area.dragover {
+    background-color: rgba(46, 139, 87, 0.2);
+    border-color: var(--accent);
+    transform: scale(1.02);
+}
+
+.image-upload-area.uploading {
+    background-color: rgba(46, 139, 87, 0.1);
+    border-style: solid;
+}
+
+.image-upload-area.uploading i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 /* Animações específicas para trocas */
 @keyframes trocasPulse {
   0% { transform: scale(1); }

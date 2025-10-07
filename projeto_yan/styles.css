@@ -366,6 +366,8 @@ nav ul li a:hover::after {
     display: block;
 }
 
+
+
 /* Fantasias em Destaque */
 #fantasias {
     background-color: var(--gray);
@@ -1012,4 +1014,144 @@ input.error {
     .avaliacoes-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* Menu Mobile - CORREÇÕES COMPLETAS */
+@media (max-width: 768px) {
+    .header-right {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    nav#nav {
+        position: static;
+    }
+    
+    nav#nav ul {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 280px;
+        height: 100vh;
+        background-color: var(--white);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        padding: 80px 20px 30px;
+        z-index: 999;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        transition: left 0.3s ease;
+        overflow-y: auto;
+    }
+    
+    nav#nav.show ul {
+        left: 0;
+    }
+    
+    nav#nav ul li {
+        margin: 0;
+        width: 100%;
+    }
+    
+    nav#nav ul li a {
+        display: block;
+        padding: 15px 20px;
+        border-bottom: 1px solid var(--gray);
+        white-space: normal;
+        word-wrap: break-word;
+        text-align: left;
+        font-size: 1.1rem;
+        color: var(--dark);
+        text-decoration: none;
+        transition: var(--transition);
+        border-radius: 8px;
+        margin-bottom: 5px;
+    }
+    
+    nav#nav ul li a:hover,
+    nav#nav ul li a.active {
+        background-color: var(--primary);
+        color: var(--white);
+        border-bottom-color: var(--primary);
+    }
+    
+    nav#nav ul li:last-child a {
+        border-bottom: none;
+    }
+    
+    .mobile-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        background: none;
+        border: 2px solid var(--primary);
+        border-radius: 8px;
+        color: var(--primary);
+        cursor: pointer;
+        z-index: 1000;
+        position: relative;
+    }
+    
+    .mobile-menu-btn.active {
+        background-color: var(--primary);
+        color: var(--white);
+    }
+    
+    .mobile-menu-btn i {
+        font-size: 1.3rem;
+        transition: transform 0.3s ease;
+    }
+    
+    .mobile-menu-btn.active i {
+        transform: rotate(90deg);
+    }
+    
+    /* Overlay para fechar o menu */
+    .nav-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 998;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-overlay.show {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    /* Garantir que o header tenha position relative */
+    header {
+        position: relative;
+        z-index: 1001;
+    }
+    
+    .auth-status {
+        margin-left: auto;
+    }
+    
+    /* Classe para esconder o scroll do body quando o menu está aberto */
+    body.no-scroll {
+        overflow: hidden;
+    }
+}
+
+/* Para a página de trocas especificamente */
+body#trocas-page .mobile-menu-btn {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+body#trocas-page .mobile-menu-btn.active {
+    background-color: var(--primary);
+    color: var(--white);
 }

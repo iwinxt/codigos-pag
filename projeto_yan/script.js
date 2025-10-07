@@ -22,6 +22,23 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    document.addEventListener('click', (e) => {
+    if (!nav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+        nav.classList.remove('show');
+        mobileMenuBtn.classList.remove('active');
+        body.classList.remove('no-scroll');
+    }
+});
+
+// Fechar menu ao redimensionar para desktop
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+        nav.classList.remove('show');
+        mobileMenuBtn.classList.remove('active');
+        body.classList.remove('no-scroll');
+    }
+});
+
     // ========== SCROLL SUAVE ==========
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {

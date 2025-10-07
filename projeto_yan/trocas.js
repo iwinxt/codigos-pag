@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 2,
             titulo: "Fantasia Pet Sustentável",
             imagem: "https://www.petsupport.com.br/wp-content/uploads/2023/02/fantasias-para-pet-e-tutor-1024x683.jpg",
-            descricao: "Fantasia de abelha para pet e tutor, feita com tecidos orgânicos. Nunca usada, em perfeito estado.",
+            descricao: "Fantasia de super heroi para pet, feita com tecidos orgânicos. Nunca usada, em perfeito estado.",
             usuario: "João Pedro",
             localizacao: "Feira de Santana, BA",
             trocaPor: "Fantasia de Super-Herói",
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 3,
             titulo: "Fantasia Tribal",
             imagem: "https://www.conexaolusofona.org/wp-content/uploads/2019/02/carnaval-sustent%C3%A1vel-750x500.jpg",
-            descricao: "Fantasia leve e artesanal, inspirada em tema tribal. Perfeita para eventos culturais e festas a fantasia.",
+            descricao: "Fantasia leve e artesanal, inspirada em temas tribais. Perfeita para eventos culturais e festas a fantasia.",
             usuario: "Camila S.",
             localizacao: "Rio de Janeiro, RJ",
             trocaPor: "Fantasia de Carnaval",
@@ -68,6 +68,23 @@ document.addEventListener('DOMContentLoaded', () => {
             estado: "rj",
             condicao: "usada",
             rating: 3.5,
+            status: "disponivel",
+            destaque: true,
+            userId: null
+        },
+        {
+            id: 4,
+            titulo: "Fantasia Fada",
+            imagem: "https://fantasiainfantil.com/cdn/shop/products/fantasia-fada-sininho-verde-infantil-543532.webp?v=1709772389",
+            descricao: "Fantasia leve e simples, inspirada em tema magicos. Perfeita para festas a fantasia.",
+            usuario: "Lucas Silva.",
+            localizacao: "Feira de Santana, BA",
+            trocaPor: "Fantasia de Animal",
+            categoria: "filmes",
+            tamanho: "p",
+            estado: "ba",
+            condicao: "usada",
+            rating: 4,
             status: "disponivel",
             destaque: true,
             userId: null
@@ -209,12 +226,123 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- FUNÇÕES PARA UPLOAD DE IMAGEM ---
+    let imageUploadHandler = null;
+
+    function setupImageUpload() {
+        const fileInput = document.getElementById('fantasiaImagem');
+        const uploadArea = document.getElementById('imageUploadArea');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        const removeBtn = document.getElementById('removeImage');
+        
+        let currentImageFile = null;
+
+        // Clique na área de upload
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Alteração no input de arquivo
+        fileInput.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                handleImageSelection(this.files[0]);
+            }
+        });
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                const file = e.dataTransfer.files[0];
+                if (file.type.startsWith('image/')) {
+                    handleImageSelection(file);
+                } else {
+                    alert('Por favor, selecione apenas arquivos de imagem.');
+                }
+            }
+        });
+
+        // Remover imagem
+        removeBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            resetImageUpload();
+        });
+
+        function handleImageSelection(file) {
+            // Validar tamanho do arquivo (5MB máximo)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('A imagem é muito grande. Por favor, selecione uma imagem menor que 5MB.');
+                return;
+            }
+
+            currentImageFile = file;
+
+            // Mostrar loading
+            uploadArea.classList.add('uploading');
+            uploadArea.innerHTML = '<i class="fas fa-spinner"></i><p>Processando imagem...</p>';
+
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                // Restaurar área de upload
+                uploadArea.classList.remove('uploading');
+                uploadArea.style.display = 'none';
+                
+                // Mostrar preview
+                previewImg.src = e.target.result;
+                imagePreview.style.display = 'block';
+            };
+            
+            reader.onerror = function() {
+                alert('Erro ao carregar a imagem. Tente novamente.');
+                resetImageUpload();
+            };
+            
+            reader.readAsDataURL(file);
+        }
+
+        function resetImageUpload() {
+            fileInput.value = '';
+            currentImageFile = null;
+            imagePreview.style.display = 'none';
+            uploadArea.style.display = 'block';
+            uploadArea.classList.remove('uploading');
+            uploadArea.innerHTML = `
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Clique para selecionar uma imagem</p>
+                <span>ou arraste e solte aqui</span>
+                <small>Formatos: JPG, PNG, GIF (Máx. 5MB)</small>
+            `;
+        }
+
+        return {
+            getCurrentImage: () => currentImageFile,
+            reset: resetImageUpload
+        };
+    }
+
     // --- MODAL PARA ADICIONAR FANTASIA ---
     function setupAddFantasiaModal() {
         const modal = document.getElementById('modalAddFantasia');
         const closeBtn = modal.querySelector('.close-modal');
         const form = document.getElementById('formAddFantasia');
         const btnAddFantasia = document.getElementById('btnAddFantasia');
+        
+        // Inicializar upload de imagem
+        imageUploadHandler = setupImageUpload();
         
         // Abrir modal
         if (btnAddFantasia) {
@@ -229,6 +357,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 modal.classList.add('show');
                 form.reset();
+                // Resetar upload de imagem também
+                if (imageUploadHandler) {
+                    imageUploadHandler.reset();
+                }
             });
         }
         
@@ -253,49 +385,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function adicionarFantasia() {
         const form = document.getElementById('formAddFantasia');
-        const formData = new FormData(form);
         
-        // Validar URL da imagem
-        const imagemUrl = document.getElementById('fantasiaImagem').value;
-        if (!isValidImageUrl(imagemUrl)) {
-            alert('Por favor, insira uma URL válida de imagem (deve começar com http:// ou https://)');
+        // Verificar se há imagem selecionada
+        if (!imageUploadHandler || !imageUploadHandler.getCurrentImage()) {
+            alert('Por favor, selecione uma imagem para a fantasia.');
             return;
         }
         
-        // Criar nova fantasia
-        const novaFantasia = {
-            id: Date.now(), // ID único baseado no timestamp
-            titulo: document.getElementById('fantasiaTitulo').value,
-            descricao: document.getElementById('fantasiaDescricao').value,
-            imagem: imagemUrl,
-            usuario: currentUser.email ? currentUser.email.split('@')[0] : 'Usuário',
-            localizacao: document.getElementById('fantasiaLocalizacao').value,
-            trocaPor: document.getElementById('fantasiaTrocaPor').value,
-            categoria: document.getElementById('fantasiaCategoria').value,
-            tamanho: document.getElementById('fantasiaTamanho').value,
-            estado: document.getElementById('fantasiaEstado').value,
-            condicao: document.getElementById('fantasiaCondicao').value,
-            rating: 0, // Nova fantasia sem avaliações
-            status: "disponivel",
-            destaque: false,
-            userId: currentUser.uid || currentUser.email, // Identificar o dono
-            dataCriacao: new Date().toISOString()
+        const imageFile = imageUploadHandler.getCurrentImage();
+        
+        // Simular upload (em produção, você enviaria para um servidor)
+        // Aqui vamos usar a URL de dados base64 diretamente
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            // Criar nova fantasia com a imagem
+            const novaFantasia = {
+                id: Date.now(), // ID único baseado no timestamp
+                titulo: document.getElementById('fantasiaTitulo').value,
+                descricao: document.getElementById('fantasiaDescricao').value,
+                imagem: e.target.result, // URL de dados base64
+                usuario: currentUser.email ? currentUser.email.split('@')[0] : 'Usuário',
+                localizacao: document.getElementById('fantasiaLocalizacao').value,
+                trocaPor: document.getElementById('fantasiaTrocaPor').value,
+                categoria: document.getElementById('fantasiaCategoria').value,
+                tamanho: document.getElementById('fantasiaTamanho').value,
+                estado: document.getElementById('fantasiaEstado').value,
+                condicao: document.getElementById('fantasiaCondicao').value,
+                rating: 0, // Nova fantasia sem avaliações
+                status: "disponivel",
+                destaque: false,
+                userId: currentUser.uid || currentUser.email, // Identificar o dono
+                dataCriacao: new Date().toISOString()
+            };
+            
+            // Adicionar à lista de minhas fantasias
+            minhasFantasias.push(novaFantasia);
+            localStorage.setItem('minhasFantasias', JSON.stringify(minhasFantasias));
+            
+            // Fechar modal e mostrar mensagem de sucesso
+            document.getElementById('modalAddFantasia').classList.remove('show');
+            alert('Fantasia anunciada com sucesso!');
+            
+            // Atualizar a lista
+            renderItems();
         };
         
-        // Adicionar à lista de minhas fantasias
-        minhasFantasias.push(novaFantasia);
-        localStorage.setItem('minhasFantasias', JSON.stringify(minhasFantasias));
+        reader.onerror = function() {
+            alert('Erro ao processar a imagem. Tente novamente.');
+        };
         
-        // Fechar modal e mostrar mensagem de sucesso
-        document.getElementById('modalAddFantasia').classList.remove('show');
-        alert('Fantasia anunciada com sucesso!');
-        
-        // Atualizar a lista
-        renderItems();
-    }
-
-    function isValidImageUrl(url) {
-        return url.startsWith('http://') || url.startsWith('https://');
+        reader.readAsDataURL(imageFile);
     }
 
     // --- FUNÇÕES PARA GERENCIAR MINHAS FANTASIAS ---
@@ -306,13 +446,23 @@ document.addEventListener('DOMContentLoaded', () => {
         // Preencher formulário com dados existentes
         document.getElementById('fantasiaTitulo').value = fantasia.titulo;
         document.getElementById('fantasiaDescricao').value = fantasia.descricao;
-        document.getElementById('fantasiaImagem').value = fantasia.imagem;
         document.getElementById('fantasiaCategoria').value = fantasia.categoria;
         document.getElementById('fantasiaTamanho').value = fantasia.tamanho;
         document.getElementById('fantasiaEstado').value = fantasia.estado;
         document.getElementById('fantasiaCondicao').value = fantasia.condicao;
         document.getElementById('fantasiaTrocaPor').value = fantasia.trocaPor;
         document.getElementById('fantasiaLocalizacao').value = fantasia.localizacao;
+        
+        // Se já há uma imagem, mostrar preview
+        if (fantasia.imagem && imageUploadHandler) {
+            const uploadArea = document.getElementById('imageUploadArea');
+            const imagePreview = document.getElementById('imagePreview');
+            const previewImg = document.getElementById('previewImg');
+            
+            uploadArea.style.display = 'none';
+            previewImg.src = fantasia.imagem;
+            imagePreview.style.display = 'block';
+        }
         
         // Abrir modal de edição
         document.getElementById('modalAddFantasia').classList.add('show');
@@ -324,14 +474,30 @@ document.addEventListener('DOMContentLoaded', () => {
         form.onsubmit = function(e) {
             e.preventDefault();
             
-            // Atualizar fantasia
+            // Se nova imagem foi selecionada, usar ela, senão manter a atual
+            const currentImage = imageUploadHandler ? imageUploadHandler.getCurrentImage() : null;
+            
+            if (currentImage) {
+                // Processar nova imagem
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    updateFantasia(itemId, event.target.result);
+                };
+                reader.readAsDataURL(currentImage);
+            } else {
+                // Manter imagem atual
+                updateFantasia(itemId, fantasia.imagem);
+            }
+        };
+        
+        function updateFantasia(itemId, imagemUrl) {
             const index = minhasFantasias.findIndex(f => f.id === itemId);
             if (index !== -1) {
                 minhasFantasias[index] = {
                     ...minhasFantasias[index],
                     titulo: document.getElementById('fantasiaTitulo').value,
                     descricao: document.getElementById('fantasiaDescricao').value,
-                    imagem: document.getElementById('fantasiaImagem').value,
+                    imagem: imagemUrl,
                     categoria: document.getElementById('fantasiaCategoria').value,
                     tamanho: document.getElementById('fantasiaTamanho').value,
                     estado: document.getElementById('fantasiaEstado').value,
@@ -348,7 +514,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Restaurar o event listener original
             form.onsubmit = originalSubmit;
-        };
+        }
     }
 
     function excluirFantasia(itemId) {
